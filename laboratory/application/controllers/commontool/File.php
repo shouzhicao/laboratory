@@ -19,22 +19,18 @@ class File
          * 2.文件大小
          * 3.保存的文件名不重复
          */
-        if(($arr["type"]=="txt") && $arr["size"]<10241000 )
-        {
+        if(($arr["type"]=="text/plain") && $arr["size"]<10241000 ){
             
             /* 上传的文件存放的位置
              * 避免文件重复:
              * 1.加时间戳.time()加用户名.$uid或者加.date('YmdHis')
              * 2.类似网盘，使用文件夹来防止重复
              */
-            $filename = "./gamefile/".date('YmdHis').$arr["name"];
+            $filename = "E:/CloudMusic/".date('YmdHis').$arr["name"];
             //保存之前判断该文件是否存在
-            if(file_exists($filename))
-            {
+            if(file_exists($filename)){
                 return 2;
-            }
-            else
-            {
+            }else{
                 //中文名的文件出现问题，所以需要转换编码格式
                 $filename = iconv("UTF-8","gb2312",$filename);
                 

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>管理员注册</title>
+	<meta name="keywords" content="keyword1,keyword2,keyword3">
+	<meta name="description" content="this is my page">
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+<script type="text/javascript">
+
+	function getXmlHttpObject(){
+		var xmlHttpRequest;
+		//不同浏览器获取xmlhttprequest对象方法不一样
+		//老版本的 Internet Explorer （IE5 和 IE6）使用 ActiveX 对象
+		if(window.ActiveXObject){
+			
+			xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+			
+		}else{
+			// IE7+、Firefox、Chrome、Safari 以及 Opera 内建了 XMLHttpRequest 对象
+			xmlHttpRequest = new XMLHttpRequest();
+			
+		}
+		return xmlHttpRequest;
+	}
+	
+	var myXmlHttpRequest = null;
+	//检查用户名是否存在
+	function checkName(){
+
+		myXmlHttpRequest = getXmlHttpObject();
+
+		//判断是否创建成功
+		if(myXmlHttpRequest){
+			//通过xmlHttpRequest对象发送请求到服务器某个页面
+			var url = "/admin/verif?adminname="+$("adminname").value;
+			//window.alert(url);
+			//打开请求
+			myXmlHttpRequest.open("get",url,true);
+			//指定回调函数.callback
+			myXmlHttpRequest.onreadystatechange=callback;
+			//发送请求,如果是get请求则填null
+			//如果是post请求，则填实际数据
+			myXmlHttpRequest.send(null);
+			
+		}else{
+			window.alert("创建失败");
+		}
+	}
+
+	//根据id取数据
+	function $(id){
+
+		return document.getElementById(id);
+		
+	}
+
+	//回调函数
+	function callback(){
+
+// 		0－（未初始化） 
+// 		(XMLHttpRequest)对象已经创建,但还没有调用open()方法
+// 		值为0表示对象已经存在，否则浏览器会报错：对象不存在。 
+
+// 		1－（载入/正在发送请求） 
+// 		对XMLHttpRequest对象进行初始化
+// 		即调用open()方法，根据参数(method,url,true)，完成对象状态的设置,并调用send()方法开始向服务端发送请求。
+// 		值为1表示正在向服务端发送请求。 
+
+// 		2－（载入完成/数据接收） 
+// 		此阶段接收服务器端的响应数据,但获得的还只是服务端响应的原始数据，并不能直接在客户端使用。
+// 		值为2表示send()方法执行完成，已经接收完全部响应数据。并为下一阶段对数据解析作好准备。 
+
+// 		3－（交互/解析数据）正在解析响应内容 
+// 		此阶段解析接收到的服务器端响应数据。
+// 		即根据服务器端响应头部返回的MIME类型把数据转换成能通过responseBody、responseText或responseXML属性存取的格式，为在客户端调用作好准备。
+// 		值为3表示正在解析数据。 
+
+// 		4－（后台处理完成）响应内容解析完成，可以在客户端调用了 
+// 		此阶段确认全部数据都已经解析为客户端可用的格式，解析已经完成。
+// 		值为4表示数据解析完毕，可以通过XMLHttpRequest对象的相应属性取得数据。	
+		if(myXmlHttpRequest.readyState === 4){
+			//取出值，根据返回值信息的格式
+			$("isExist").value = myXmlHttpRequest.responseText;
+			
+		}
+		
+	}
+</script>
+</head>
+<body>
+<hr/>
+<hr>
+	<form action="" name="" method="post">
+		<table border="1" align="center">
+			<tr>
+			<td colspan="2" align="center">注册页面</td>
+			</tr>
+			<tr>
+			<td>用&nbsp;户&nbsp;名:</td><td>
+			<input type="text" onkeyup="checkName();" name="adminname" id="adminname">
+			<input style="border-width:0;color:red" type="text" id="isExist">
+			</td>
+			<tr>
+			<td>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</td><td><input type="password" name="password"></td>
+			</tr>
+			<tr>
+			<td>确认密码:</td><td><input type="password" name="reviewpassword"></td>
+			</tr>
+			<tr>
+			<td>真实姓名:</td><td><input type="text" name="realname"></td>
+			<tr>
+			<td>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</td><td><input type="text" name="email"/></td>
+			</tr>
+			<tr>
+			<td colspan="2">
+			<input type="submit" name="submit" value="提交">
+			<input type="reset" name="reset" value="重置">
+			</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

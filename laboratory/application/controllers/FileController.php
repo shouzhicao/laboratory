@@ -10,33 +10,46 @@ class FileController extends BaseController{
     public function init(){
         BaseController::init();
     }
-
     
     /**
      * 文件上传接口
      */
-    public function fileuploadAction(){
+    public function uploadAction(){
         
-        //获取文件信息
-        $fileInfo = $_FILES["file"];
-        //$fileInfo = "D:\aaa.txt";
-
-        $file = new File();
-        $result = $file->fileUpload($fileInfo);
-        if($result == 1){
-            $arr = array("successed"=>true,"message"=>"上传成功");
-            exit($arr);           
-        }
-        else if($result == 2){
-            $arr = array("successed"=>false,"message"=>"文件已存在");
-            exit($arr); 
-        }
-        else if($result == 0){
-            $arr = array("successed"=>false,"message"=>"上传失败");
-            exit($arr);
-        }
+        //$this->render('upload');
+        $this->uploadprocessAction();
+        
     }
     
+    
+    public function uploadprocessAction(){
+
+         //获取文件信息
+         $fileInfo = $_FILES["uploadedfile"];
+         $arr = null;
+         $file = new File();
+         $result = $file->fileUpload($fileInfo);
+         
+         // result=1 上传成功
+         // result=2 文件已存在
+         // result=0 上传失败
+         if($result == 1){
+             
+            $arr = array("successed"=>true,"message"=>"upload success");
+            
+         }
+         else if($result == 2){
+             
+            $arr = array("successed"=>false,"message"=>"file exist");
+
+         }
+         else if($result == 0){
+             
+            $arr = array("successed"=>false,"message"=>"upload failed");
+            
+         }
+         exit(json_encode($arr));
+    }
     /**
      * 课程文件下载接口
      */
@@ -52,7 +65,7 @@ class FileController extends BaseController{
      * 音频/视频下载接口
      */
     public function downaudioAction(){
-        
+        $this->render('upload');
     }
     
 }

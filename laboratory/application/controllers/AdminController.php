@@ -11,6 +11,35 @@ class AdminController extends BaseController
         BaseController::init();
     }
     
+    //跳转到注册界面
+    public function regAction(){
+        $this->render('register');
+    }
+    
+    //用户名验证函数
+    public function verifAction(){
+
+        //告诉浏览器返回的数据是xml格式
+        header("Content-Type:text/xml;charset=utf-8");
+        //告诉浏览器需要缓存数据
+        header("Cache-Control:no-cache");
+        $adminInfo = new AdminInfo();
+        $adminname = $this->getRequest()->getParam('adminname');
+        $where = "adminName='".$adminname."'";
+        $result = $adminInfo->fetchRow($where);
+        
+        if(!empty($result)){
+            exit("用户名已存在");
+        }else{
+            exit("用户名可用");
+        }
+
+    }
+    //管理员注册处理
+    public function regprocessAction(){
+        $this->render('login');
+    }
+    
     //跳转到登录界面
     public function loginAction(){
 
@@ -104,14 +133,23 @@ class AdminController extends BaseController
     public function usereditprocessAction(){
         
         $userId = $this->getRequest()->getParam('userId');
-        $identityType = $this->getRequest()->getParam("identityType");
+        $identityType = $this->getRequest()->getParam('identityType');
         $identifier = $this->getRequest()->getParam('identifier');
         $credential = $this->getRequest()->getParam('credential');
         $loginNum = $this->getRequest()->getParam('loginNum');
         $loginTime = $this->getRequest()->getParam('loginTime');
-        
-        $this->render('userlist');
+        $userAuths = new UserAuths();
+        $where = "userId=".$userId;
+        $data = array("userId"=>$userId,
+                        "identityType"=>$identityType,
+                        "identifier"=>$identifier,
+                        "credential"=>$credential,
+                        "loginNum"=>$loginNum,
+                        "loginTime"=>$loginTime);
+        $userAuths->update($data, $where);
+        $this->listAction();
     }
+    
     /**
      * 获取用户列表
      */
